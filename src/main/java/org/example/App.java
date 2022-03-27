@@ -1,0 +1,211 @@
+package org.example;
+
+import org.example.DTO.Staff;
+
+import java.util.*;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main(String[] args) {
+        App main = new App();
+        main.start();
+    }
+
+    PriorityQueue<Staff> queue;
+    static ArrayList<Staff> staff_list = new ArrayList<>();
+
+    public void start(){
+
+        this.queue = new PriorityQueue<>();
+
+
+        staff_list.add(new Staff(1, "Manager", "Tanish", "Afre", 15.50, 75, "ta@gmail.com"));   //1162.5
+        staff_list.add(new Staff(2, "Supervisor", "John", "Wane", 14.50, 50, "jw@gmail.com"));  //725
+        staff_list.add(new Staff(3, "Assistant", "Bruce", "Banner", 11.75, 20, "bb@gmail.com"));    //235
+        staff_list.add(new Staff(4, "Bar Staff", "Adolf", "Hitler", 10.50, 15, "ah@gmail.com"));    //157.5
+        staff_list.add(new Staff(5, "Bar Staff", "Vladimir", "Putin", 10.25, 20, "vp@gmail.com"));  //205
+        staff_list.add(new Staff(6, "Bar Staff", "Yug", "Vamos", 10.25, 25, "yv@gmail.com"));   //256.25
+        staff_list.add(new Staff(7, "Bar Staff", "Alex", "Costa", 10.80, 30, "ac@gmail.com"));  //324
+        staff_list.add(new Staff(8, "Floor Staff", "Alexa", "Nosiri", 11.50, 15, "an@gmail.com"));  //172.5
+        staff_list.add(new Staff(9, "Floor Staff", "Tom", "Holland", 10.50, 20, "th@gmail.com"));   //230
+        staff_list.add(new Staff(10, "Floor Staff", "Stephen", "Strange", 12.00, 25, "ss@gmail.com"));  //300
+        staff_list.add(new Staff(11, "Floor Staff", "Seb", "Dovel", 12.00, 30, "sd@gmail.com"));    //360
+
+
+        //Main Menu
+        final String MENU_ITEMS = "\n*** MAIN MENU ***\n"
+                + "1. Display All Staff\n"
+                + "2. Retrieve a Staff object by key from HashMap\n"
+                + "3. Display Staff-Station from TreeMap in order of Staff_First_Name\n"
+                + "4. Priority Sequence Simulation\n"
+                + "5. PriorityQueue Two-Field Comparison Demo\n"
+                + "6. Staff DB Collections\n"
+                + "7. Exit\n"
+                + "Enter Option [1,7]";
+
+        final int DISPLAY_STAFF = 1;
+        final int HASH_RETRIEVE = 2;
+        final int TREE_RETRIEVE = 3;
+        final int PRIORITY_QUEUE_DISPLAY = 4;
+        final int TWO_FIELD_COMPARISON = 5;
+        final int Staff_Collections = 6;
+        final int EXIT = 7;
+
+        Scanner keyboard = new Scanner(System.in);
+        int option = 0;
+        do {
+            System.out.println("\n" + MENU_ITEMS);
+            try {
+                String usersInput = keyboard.nextLine();
+                option = Integer.parseInt(usersInput);
+                switch (option) {
+                    case DISPLAY_STAFF:
+                        System.out.println("All Staff");
+                        System.out.println();
+                        displayStaff(staff_list);
+                        break;
+                    case HASH_RETRIEVE:
+                        System.out.println("Hash Map Retrieve option chosen");
+                        hashRetrieve(staff_list);
+                        break;
+                    case TREE_RETRIEVE:
+                        System.out.println("Display using TreeMap option chosen");
+                        treeRetrieve(staff_list);
+                        break;
+                    case PRIORITY_QUEUE_DISPLAY:
+                        System.out.println("Priority Sequence Simulation - Work Hours");
+                        demoWorkHoursComparator();
+                        break;
+                    case TWO_FIELD_COMPARISON:
+                        PriorityQueueTwoFieldComparisonDemo(staff_list);
+                    case Staff_Collections:
+                        DBCollection();
+                        break;
+                    case EXIT:
+                        System.out.println("Exit Menu option chosen");
+                        break;
+                    default:
+                        System.out.print("Invalid option - please enter number in range");
+                        break;
+                }
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.print("Invalid option - please enter number in range");
+            }
+        } while (option != EXIT);
+        System.out.println("\nExiting Main Menu, Thank you!.");
+
+    }
+
+    // Feature 1
+    // Display in Table form
+    public static void displayStaff(ArrayList<Staff> staffArrayList) {
+
+        System.out.printf("%5s\t%-15s\t%-15s\t%-15s\t%-2s\t%5s %15s\n", "ID", "First_Name", "Last_Name", "Staff Position", "Rate_Per_Hour", "Work_Hours", "Email");
+        for (Staff s : staffArrayList) {
+            System.out.printf("%5d\t%-15s\t%-15s\t%-15s\t%-2.2f\t%10d\t\t\t\t\t%-20s\n", s.getStaff_id(), s.getFirst_name(), s.getLast_name(), s.getStaff_position(), s.getRate_per_hour(), s.getWork_hours(), s.getEmail());
+        }
+
+    }
+
+    // Feature 2
+    // HashMaping
+    public static void hashRetrieve(ArrayList<Staff> staffArrayList) {
+        Scanner sc = new Scanner(System.in);
+        Map<Integer, Staff> map = new HashMap<>();
+        for (Staff s : staffArrayList) {
+            map.put(s.getStaff_id(), s);
+        }
+
+        // Display all possible options to staff members
+        Set<Integer> keySet = map.keySet();  // get all keys
+        System.out.println("Choose from following Staff IDs: ");
+        for (Integer id : keySet) {
+            System.out.print(id + ", ");
+        }
+
+        try {
+            System.out.println("\nPlease Enter Staff ID: ");
+            int key = sc.nextInt();
+            if (map.containsKey(key)) {
+                System.out.println("Object with key " + key + " - " + map.get(key));
+            } else {
+                System.out.println("Staff object with key " + key + " is NOT found.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Id is not a Number");
+        }
+    }
+
+    // Feature 3
+    // tree
+    public static void treeRetrieve(ArrayList<Staff> staffArrayList) {
+        //Station objects
+        Counter c1 = new Counter(1, "HardDrinks");
+        Counter c2 = new Counter(2, "Cocktail");
+        Counter c3 = new Counter(3, "Mocktail");
+        Counter c4 = new Counter(4, "Beer");
+
+        Map<Staff, Counter> stationMap = new TreeMap<>(new StaffCounterComparator());
+
+        // filling values in treeMap as per work hours just to avoid tedious hard coding
+
+        for (Staff s : staffArrayList) {
+            if (s.getWork_hours() == 15) {
+                stationMap.put(s, c1);
+            } else if (s.getWork_hours() == 20) {
+                stationMap.put(s, c2);
+            } else if (s.getWork_hours() == 25){
+                stationMap.put(s, c3);
+            } else if (s.getWork_hours() == 30){
+                stationMap.put(s, c4);
+            }
+        }
+
+        System.out.println("\nTreeMap: [ Staff -> Counter ] in Order of Staff working hours\n");
+
+        // for each Entry in the set of all entries
+        for (Map.Entry<Staff, Counter> entry : stationMap.entrySet()) {
+            Staff staff = entry.getKey();
+            Counter counter = entry.getValue();
+            System.out.println("{" + staff + "} -> " + counter);
+        }
+
+    }
+
+    // Feature 4
+    // Priority queue
+    private static void demoWorkHoursComparator() {
+        PriorityQueue<Staff> queue = new PriorityQueue<Staff>(
+                new StaffWorkHourComparator(SortType.Ascending));
+
+        // add two third-priority staff members.
+
+        queue.add(new Staff(3, "Assistant", "Bruce", "Banner", 11.75, 20, "bb@gmail.com"));    //235
+        queue.add(new Staff(7, "Bar Staff", "Alex", "Costa", 10.80, 30, "ac@gmail.com"));  //324
+
+
+        // add two second-priority level items
+        queue.add(new Staff(6, "Bar Staff", "Yug", "Vamos", 10.25, 25, "yv@gmail.com"));   //256.25
+        queue.add(new Staff(9, "Floor Staff", "Tom", "Holland", 10.50, 20, "th@gmail.com"));   //230
+
+
+        // remove and display one element
+        System.out.println("Remove and display a single element");
+        Staff s = queue.remove();
+        System.out.println(s.toString() + "  -  Pay per week: €" + (s.getRate_per_hour() * s.getWork_hours()));
+
+        // add one top-priority element
+        queue.add(staff_list.get(0));
+
+        // remove and display all elements in priority order
+        System.out.println("\nRemove and display all elements");
+        while ( !queue.isEmpty() ) {
+            Staff r = queue.remove();
+            System.out.println(r.toString() + "\t-\tPrice per ml: €" + (Double.valueOf(Math.round((r.getRate_per_hour()/r.getWork_hours()) * 100)) / 100) );
+        }
+    }
+}
