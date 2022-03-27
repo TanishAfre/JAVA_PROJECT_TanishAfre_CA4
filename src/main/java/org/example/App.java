@@ -1,6 +1,9 @@
 package org.example;
 
+import org.example.DAO.MySqlStaffDAO;
+import org.example.DAO.StaffDAO_Interface;
 import org.example.DTO.Staff;
+import org.example.Exceptions.DaoException;
 
 import java.util.*;
 
@@ -208,4 +211,117 @@ public class App
             System.out.println(r.toString() + "\t-\tPrice per ml: €" + (Double.valueOf(Math.round((r.getRate_per_hour()/r.getWork_hours()) * 100)) / 100) );
         }
     }
+
+    public static void PriorityQueueTwoFieldComparisonDemo(ArrayList<Staff> stafflist) {
+        PriorityQueue<Staff> queue = new PriorityQueue<Staff>();
+        for (Staff s : stafflist) {
+            queue.add(s);
+        }
+        System.out.println("Staff in priority order of Work Hours Within FistName and LastName");
+        Iterator<Staff> iterator = queue.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(queue.remove());
+        }
+    }
+//________________________________________________________________________________________________________________________
+// menu 2
+//________________________________________________________________________________________________________________________
+
+    public static void DBCollection(){
+
+        StaffDAO_Interface IStaffDao = new MySqlStaffDAO(); //Staff DAO Interface
+
+        //DB Collections Sub Menu
+        final String MENU_ITEM = "\n*** COLLECTIONS MENU ***\n"
+                + "1. Find All Staff\n"
+                + "2. Find Staff by ID\n"
+                + "3. Exit\n"
+                + "Enter Option [1,3]";
+
+        final int findAll = 1;
+        final int findByID = 2;
+        final int EXIT = 3;
+
+
+        Scanner kb = new Scanner(System.in);
+        int option = 0;
+        do {
+            System.out.println("\n" + MENU_ITEM);
+            try {
+                String usersInput = kb.nextLine();
+                option = Integer.parseInt(usersInput);
+                switch (option) {
+                    case findAll:
+                        System.out.println("All Staff");
+                        DBFindAllStaff(IStaffDao);
+                        break;
+                    case findByID:
+                        System.out.println("Find Staff by ID option chosen");
+                        DBFindStaffByID(IStaffDao);
+                        break;
+                    case EXIT:
+                        System.out.println("Exit Menu option chosen");
+                        break;
+                    default:
+                        System.out.print("Invalid option - please enter number in range");
+                        break;
+                }
+
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.print("Invalid option - please enter number in range");
+            }
+        } while (option != EXIT);
+
+        System.out.println("\nExiting Collections Sub Menu.");
+    }
+
+    public static void DBFindAllStaff(StaffDAO_Interface IStaffDao){
+        try
+        {
+            System.out.println("\nfindAllStaff()");
+            List<Staff> staffList = IStaffDao.findAllStaff();
+
+            if( staffList.isEmpty() )
+                System.out.println("No Staff found");
+            else {
+                displayStaff(staffList);
+            }
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static void DBFindStaffByID(StaffDAO_Interface IStaffDao){
+
+        Scanner sc = new Scanner(System.in);
+        try
+        {
+            System.out.println("\nfindStaffById()");
+
+            try {
+                System.out.println("Enter Staff ID");
+
+                int id = sc.nextInt();
+
+
+                Staff s = IStaffDao.findStaffbyID(id);
+
+                if (s != null) // null returned if userid and password not valid
+                    System.out.println("Staff found: ID=" + s.getStaff_id() + " " + s.getFirst_name() + " " + s.getLast_name() + "\tEmail=" + s.getEmail() + "\tPosition=" + s.getStaff_position() + "\tWorkHours=" + s.getWork_hours() + "\tRatePerHour=" + s.getRate_per_hour());
+                else
+                    System.out.println("Staff with ID '" + id + "' doesnt exist.");
+            }
+            catch (NumberFormatException | InputMismatchException e){
+                System.out.println("Invalid ID");
+            }
+
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
+
 }
