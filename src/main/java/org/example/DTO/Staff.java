@@ -3,7 +3,8 @@ package org.example.DTO;
 
 import java.util.Objects;
 
-public class Staff {
+public class Staff implements Comparable<Staff>{
+
     private int staff_id;
     private String staff_position;
     private String first_name;
@@ -108,6 +109,31 @@ public class Staff {
                 ", work_hours=" + work_hours +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Staff o) {
+        {
+            boolean bSameFirst =
+                    this.getFirst_name().equalsIgnoreCase(o.getFirst_name());
+
+            boolean bSameLast =
+                    this.getLast_name().equalsIgnoreCase(o.getLast_name());
+
+            if (bSameFirst && bSameLast) // Both first and last names are the same
+            {
+                //so, compare based on Work Hours
+                return this.getWork_hours() - o.getWork_hours();
+            } else if (!bSameFirst && bSameLast) //Different first, same last
+            {
+                return this.getFirst_name().compareToIgnoreCase(  // so compare on first
+                        o.getFirst_name());
+            } else //All other cases
+            {
+                return this.getLast_name().compareToIgnoreCase(
+                        o.getLast_name());
+            }
+        }
     }
 }
 
