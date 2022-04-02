@@ -111,7 +111,7 @@ public class App
 
     // Feature 1
     // Display in Table form
-    public static void displayStaff(ArrayList<Staff> staffArrayList) {
+    public static void displayStaff(List<Staff> staffArrayList) {
 
         System.out.printf("%5s\t%-15s\t%-15s\t%-15s\t%-2s\t%5s %15s\n", "ID", "First_Name", "Last_Name", "Staff Position", "Rate_Per_Hour", "Work_Hours", "Email");
         for (Staff s : staffArrayList) {
@@ -315,7 +315,7 @@ public class App
         try
         {
             System.out.println("\nfindAllStaff()");
-            ArrayList<Staff> staffList = (ArrayList<Staff>) IStaffDao.findAllStaff();
+            List<Staff> staffList = IStaffDao.findAllStaff();
 
             if( staffList.isEmpty() )
                 System.out.println("No Staff found");
