@@ -293,7 +293,7 @@ public class App
                         break;
                     case findStaffbyIDJSON:
                         System.out.println("JSON Staff by ID option chosen");
-                //        findStaffbyIDJSON(IStaffDao);
+                        findStaffbyIDJSON(IStaffDao);
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
@@ -551,5 +551,22 @@ public class App
         }
     }
 
+    public static void findStaffbyIDJSON(StaffDAO_Interface IStaffDao){
+        Scanner kb = new Scanner(System.in);
+        try
+        {
+            try {
+                System.out.println("Enter Staff ID");
+                int json_id = kb.nextInt();
+                System.out.println(IStaffDao.findStaffbyIDJSON(json_id));
+
+            }catch (InputMismatchException | NumberFormatException e) {
+                System.out.print("Invalid option - please enter number in range");
+            }
+        }catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
 
 }
