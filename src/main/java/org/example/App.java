@@ -263,7 +263,7 @@ public class App
                         break;
                     case deleteByID:
                         System.out.println("Delete staff by ID option chosen");
-       //                 DBDeleteStaffByID(IStaffDao);
+                        DBDeleteStaffByID(IStaffDao);
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
@@ -318,6 +318,40 @@ public class App
                     System.out.println("Staff found: ID=" + s.getStaff_id() + " " + s.getFirst_name() + " " + s.getLast_name() + "\tEmail=" + s.getEmail() + "\tPosition=" + s.getStaff_position() + "\tWorkHours=" + s.getWork_hours() + "\tRatePerHour=" + s.getRate_per_hour());
                 else
                     System.out.println("Staff with ID '" + id + "' doesnt exist.");
+            }
+            catch (NumberFormatException | InputMismatchException e){
+                System.out.println("Invalid ID");
+            }
+
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static void DBDeleteStaffByID(StaffDAO_Interface IStaffDao){
+        Scanner sc = new Scanner(System.in);
+        try
+        {
+            System.out.println("\ndeleteStaffByID()");
+
+            try {
+                System.out.println("Enter Staff ID");
+
+                int id = sc.nextInt();
+
+
+                Staff s = IStaffDao.findStaffbyID(id);
+
+                if(s!=null){
+                    IStaffDao.deleteById(id);
+                    System.out.println("Staff with ID "+id+" deleted successfully.");
+                }
+                else{
+                    System.out.println("Staff with ID "+id+" doesn't exist.");
+                }
+
             }
             catch (NumberFormatException | InputMismatchException e){
                 System.out.println("Invalid ID");
