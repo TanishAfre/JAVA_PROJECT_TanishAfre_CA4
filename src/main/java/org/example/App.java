@@ -289,7 +289,7 @@ public class App
                         break;
                     case findAllStaffJSON:
                         System.out.println("JSON All Staff option chosen");
-                  //      findAllStaffJSON(IStaffDao);
+                        findAllStaffJSON(IStaffDao);
                         break;
                     case findStaffbyIDJSON:
                         System.out.println("JSON Staff by ID option chosen");
@@ -537,6 +537,16 @@ public class App
             }
 
         } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void findAllStaffJSON(StaffDAO_Interface IStaffDao){
+        try
+        {
+            System.out.println(IStaffDao.findAllStaffJSON());
+        }catch( DaoException e )
+        {
             e.printStackTrace();
         }
     }
