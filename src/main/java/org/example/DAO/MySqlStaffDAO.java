@@ -143,4 +143,54 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             }
         }
     }
+
+    @Override
+    public String addStaff(Staff staff) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        int STAFF_ID = staff.getStaff_id();
+        String FIRST_NAME = staff.getFirst_name();
+        String LAST_NAME = staff.getLast_name();
+        double RATE_PER_HOUR  = staff.getRate_per_hour();
+        int WORK_HOURS  = staff.getWork_hours();
+        String EMAIL = staff.getEmail();
+
+        try {
+            //Get connection object using the methods in the super class (MySqlDao.java)...
+            connection = this.getConnection();
+
+            String query = "INSERT INTO Bar_Staff\n" +
+                    "VALUES (?,?, ?, ?, ?,?);";
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, STAFF_ID);
+            preparedStatement.setString(2, FIRST_NAME);
+            preparedStatement.setString(3, LAST_NAME);
+            preparedStatement.setDouble(4, RATE_PER_HOUR);
+            preparedStatement.setInt(5, WORK_HOURS);
+            preparedStatement.setString(6, EMAIL);
+
+            preparedStatement.executeUpdate();
+
+            return "Added Successfully";
+
+        } catch (SQLException e) {
+            throw new DaoException("findAllStaffSet() " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findAllStaff() " + e.getMessage());
+            }
+        }
+    }
 }
