@@ -275,7 +275,7 @@ public class App
                         break;
                     case insertStaff:
                         System.out.println("Insert Staff option chosen");
-                  //      DBInsertStaff(IStaffDao);
+                        DBInsertStaff(IStaffDao);
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
