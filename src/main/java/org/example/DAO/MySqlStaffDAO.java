@@ -23,7 +23,7 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             //Get connection object using the methods in the super class (MySqlDao.java)...
             connection = this.getConnection();
 
-            String query = "SELECT * FROM bakerystaff";
+            String query = "SELECT * FROM Bar_Staff";
             ps = connection.prepareStatement(query);
 
             //Using a PreparedStatement to execute SQL...
@@ -68,7 +68,7 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
         try {
             connection = this.getConnection();
 
-            String query = "SELECT * FROM bakerystaff WHERE staffID = ?";
+            String query = "SELECT * FROM Bar_Staff WHERE staffID = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
 
@@ -102,5 +102,45 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             }
         }
         return s;     // reference to User object, or null value
+    }
+
+    @Override
+    public String deleteById(int id) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        int staffID = id;
+
+        try {
+            //Get connection object using the methods in the super class (MySqlDao.java)...
+            connection = this.getConnection();
+
+            String query = "DELETE FROM Bar_Staff WHERE staffID = ?;";
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, staffID);
+
+            preparedStatement.executeUpdate();
+
+            return "Deleted Successfully";
+
+        } catch (SQLException e) {
+            throw new DaoException("findAllStaffResultSet() " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findAllStaff() " + e.getMessage());
+            }
+        }
     }
 }
