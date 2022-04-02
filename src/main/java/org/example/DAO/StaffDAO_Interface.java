@@ -24,4 +24,5 @@ public interface StaffDAO_Interface
     public List<Staff> findStaffUsingFilterFirstNameComparator() throws DaoException;
 
     public String findAllStaffJSON() throws DaoException;
+    public String findStaffbyIDJSON(int id) throws DaoException;
 }

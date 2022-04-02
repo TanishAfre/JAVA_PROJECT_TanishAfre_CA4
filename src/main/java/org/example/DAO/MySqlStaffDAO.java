@@ -332,7 +332,32 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             e.printStackTrace();
         }
         return "Error cannot Parse to JSON";
+    }
 
+    public String findStaffbyIDJSON(int id){
+        try{
+            List<Staff> staffList = findAllStaff();
+            String StaffJSON="";
+            Staff sTest= findStaffbyID(id);
+            if(sTest==null){
+                System.out.println("Staff with ID = "+id+" doesn't exist.");
+            }
+            else{
+                System.out.println("Staff with id "+id+" as a JSON String: ");
+            }
+            Gson gsonParser =  new GsonBuilder().setPrettyPrinting().create();
+            for(Staff s: staffList){
+                if(s.getStaff_id()==id) {
+                    StaffJSON = gsonParser.toJson(s);
+                }
+            }
+            return StaffJSON;
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+        return "Error cannot Parse to JSON";
     }
 
 }
