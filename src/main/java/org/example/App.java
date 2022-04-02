@@ -208,7 +208,7 @@ public class App
         System.out.println("\nRemove and display all elements");
         while ( !queue.isEmpty() ) {
             Staff r = queue.remove();
-            System.out.println(r.toString() + "\t-\tPrice per ml: €" + (Double.valueOf(Math.round((r.getRate_per_hour()/r.getWork_hours()) * 100)) / 100) );
+            System.out.println(r.toString() + "\t-\tPrice per week: €" + (Double.valueOf(Math.round((r.getRate_per_hour()*r.getWork_hours()) * 100)) / 100) );
         }
     }
 
@@ -235,12 +235,14 @@ public class App
         final String MENU_ITEM = "\n*** COLLECTIONS MENU ***\n"
                 + "1. Find All Staff\n"
                 + "2. Find Staff by ID\n"
-                + "3. Exit\n"
+                + "3. Delete Staff by ID\n"
+                + "4. Exit\n"
                 + "Enter Option [1,3]";
 
         final int findAll = 1;
         final int findByID = 2;
-        final int EXIT = 3;
+        final int deleteByID = 3;
+        final int EXIT = 4;
 
 
         Scanner kb = new Scanner(System.in);
@@ -258,6 +260,10 @@ public class App
                     case findByID:
                         System.out.println("Find Staff by ID option chosen");
                         DBFindStaffByID(IStaffDao);
+                        break;
+                    case deleteByID:
+                        System.out.println("Delete staff by ID option chosen");
+       //                 DBDeleteStaffByID(IStaffDao);
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
@@ -279,7 +285,7 @@ public class App
         try
         {
             System.out.println("\nfindAllStaff()");
-            List<Staff> staffList = IStaffDao.findAllStaff();
+            ArrayList<Staff> staffList = (ArrayList<Staff>) IStaffDao.findAllStaff();
 
             if( staffList.isEmpty() )
                 System.out.println("No Staff found");
