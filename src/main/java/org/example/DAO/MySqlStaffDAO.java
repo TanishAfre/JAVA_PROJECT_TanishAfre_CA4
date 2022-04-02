@@ -1,5 +1,7 @@
 package org.example.DAO;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.example.DTO.Staff;
 import org.example.Exceptions.DaoException;
 import org.example.SortType;
@@ -10,7 +12,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
@@ -312,6 +316,23 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             }
         }
         return staffList;     // may be empty
+    }
+
+    public String findAllStaffJSON(){
+        System.out.println("All Staff as JSON String: ");
+        try {
+            List<Staff> staffList = findAllStaff();
+            Gson gsonParser = new GsonBuilder().setPrettyPrinting().create();
+            String StaffJSON = gsonParser.toJson(staffList);
+
+            return StaffJSON;
+
+        }catch ( DaoException e )
+        {
+            e.printStackTrace();
+        }
+        return "Error cannot Parse to JSON";
+
     }
 
 }
