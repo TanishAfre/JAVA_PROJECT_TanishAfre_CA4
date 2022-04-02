@@ -5,6 +5,9 @@ import org.example.DAO.StaffDAO_Interface;
 import org.example.DTO.Staff;
 import org.example.Exceptions.DaoException;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import java.util.*;
 
 /**
@@ -102,6 +105,9 @@ public class App
         System.out.println("\nExiting Main Menu, Thank you!.");
 
     }
+
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     // Feature 1
     // Display in Table form
@@ -244,7 +250,7 @@ public class App
         final int findByID = 2;
         final int deleteByID = 3;
         final int insertStaff =4;
-        final int EXIT = 4;
+        final int EXIT = 5;
 
 
         Scanner kb = new Scanner(System.in);
@@ -361,6 +367,63 @@ public class App
             }
             catch (NumberFormatException | InputMismatchException e){
                 System.out.println("Invalid ID");
+            }
+
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static void DBInsertStaff(StaffDAO_Interface IStaffDao){
+
+        Scanner sc = new Scanner(System.in);
+        try
+        {
+            System.out.println("\ninsertStaff()");
+
+            try {
+
+                System.out.println("Enter Staff ID");
+                int id = sc.nextInt();
+                Staff s = IStaffDao.findStaffbyID(id);
+                if(s==null) {
+                    System.out.println("\nCall addStaff()\n");
+                    try {
+                        System.out.println("Enter Staff Position");
+                        String staff_position = sc.next();
+                        System.out.println("Enter Staff First Name");
+                        String first_name = sc.next();
+                        System.out.println("Enter Staff Last Name");
+                        String last_name = sc.next();
+                        System.out.println("Enter Staff Rate Per Hour");
+                        double rate_per_hour = sc.nextDouble();
+                        System.out.println("Enter Staff Work Hours");
+                        int work_hours = sc.nextInt();
+                        System.out.println("Enter Staff Email");
+                        String email = sc.next();
+                        /*regex*/
+                        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+                        if(matcher.matches()){
+                            Staff staff = new Staff(id,staff_position,first_name,last_name,rate_per_hour,work_hours,email);
+                            IStaffDao.addStaff(staff);
+                            System.out.println("Added Successfully.");
+                        }
+                        else{
+                            System.out.println("Email Format Incorrect - Failed to add Staff!");
+                        }
+                    }catch(NumberFormatException | InputMismatchException e){
+                        System.out.println("Invalid Format - Insert Failed!");
+                    }
+                }
+                else{
+                    System.out.println("Duplicate ID - Insert Failed!");
+                }
+
+            }
+            catch (NumberFormatException | InputMismatchException e){
+                System.out.println("Invalid Format");
             }
 
         }
