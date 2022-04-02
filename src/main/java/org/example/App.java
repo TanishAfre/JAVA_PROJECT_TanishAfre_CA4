@@ -236,12 +236,14 @@ public class App
                 + "1. Find All Staff\n"
                 + "2. Find Staff by ID\n"
                 + "3. Delete Staff by ID\n"
-                + "4. Exit\n"
-                + "Enter Option [1,3]";
+                + "4. Add New Staff\n"
+                + "5. Exit\n"
+                + "Enter Option [1,5]";
 
         final int findAll = 1;
         final int findByID = 2;
         final int deleteByID = 3;
+        final int insertStaff =4;
         final int EXIT = 4;
 
 
@@ -264,6 +266,10 @@ public class App
                     case deleteByID:
                         System.out.println("Delete staff by ID option chosen");
                         DBDeleteStaffByID(IStaffDao);
+                        break;
+                    case insertStaff:
+                        System.out.println("Insert Staff option chosen");
+                  //      DBInsertStaff(IStaffDao);
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
