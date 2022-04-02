@@ -521,7 +521,25 @@ public class App
             e.printStackTrace();
         }
     }
+    public static void DBFindAllStaffUsingFilterFirstName(StaffDAO_Interface IStaffDao) {
+        try {
+            System.out.println("\nfindAllStaffUsingFilter()\nIn Order of First_Name\n");
+            /**Using DB Query*/
+            //List<Staff> staffList = IStaffDao.findStaffUsingFilterFirstName();
 
+            /***Using Comparator*/
+            List<Staff> staffList = IStaffDao.findStaffUsingFilterFirstNameComparator();
+
+            if (staffList.isEmpty())
+                System.out.println("No Staff found");
+            else {
+                displayStaff(staffList);
+            }
+
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
