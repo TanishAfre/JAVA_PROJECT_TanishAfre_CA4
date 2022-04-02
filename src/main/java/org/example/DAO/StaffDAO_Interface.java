@@ -22,4 +22,6 @@ public interface StaffDAO_Interface
 
     /**Using Comparator - StaffFirstNameComparator*/
     public List<Staff> findStaffUsingFilterFirstNameComparator() throws DaoException;
+
+    public String findAllStaffJSON() throws DaoException;
 }
