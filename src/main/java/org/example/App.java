@@ -499,5 +499,29 @@ public class App
         System.out.println("\nExiting Filter Sub Menu.");
     }
 
+    public static void DBFindAllStaffUsingFilterWorkHours(StaffDAO_Interface IStaffDao){
+        try
+        {
+            System.out.println("\nfindAllStaffUsingFilter()\nIn Order of Work_Hours\n");
+            /**Using DB Query*/
+            //List<Staff> staffList = IStaffDao.findStaffUsingFilterWorkHour();
+
+            /***Using Comparator*/
+            List<Staff> staffList = IStaffDao.findStaffUsingFilterWorkHourComparator();
+
+            if( staffList.isEmpty() )
+                System.out.println("No Staff found");
+            else {
+                displayStaff(staffList);
+            }
+
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
