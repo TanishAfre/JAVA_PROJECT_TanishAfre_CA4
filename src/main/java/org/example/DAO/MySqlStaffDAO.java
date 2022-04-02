@@ -2,6 +2,9 @@ package org.example.DAO;
 
 import org.example.DTO.Staff;
 import org.example.Exceptions.DaoException;
+import org.example.SortType;
+import org.example.StaffCounterComparator;
+import org.example.StaffWorkHourComparator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -193,4 +196,122 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             }
         }
     }
+    @Override
+    /**Using DB Query - Order By*/
+    public List<Staff> findStaffUsingFilterWorkHour() throws DaoException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        List<Staff> staffList = new ArrayList<>();
+
+        try {
+            //Get connection object using the methods in the super class (MySqlDao.java)...
+            connection = this.getConnection();
+
+            String query = "Select * from Bar_Staff ORDER by workHours";
+            ps = connection.prepareStatement(query);
+
+            //Using a PreparedStatement to execute SQL...
+            resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                int staffID = resultSet.getInt("staffID");
+                String staff_position = resultSet.getString("staff_position");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                double ratePerHour = resultSet.getDouble("ratePerHour");
+                int workHours = resultSet.getInt("workHours");
+                String email = resultSet.getString("email");
+                Staff s = new Staff(staffID, staff_position, firstName, lastName, ratePerHour, workHours, email);
+                staffList.add(s);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("findAllStaffFilter() " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findAllStaff() " + e.getMessage());
+            }
+        }
+        return staffList;     // may be empty
+    }
+
+    @Override
+    /**Using Comparator - StaffWorkHoursComparator*/
+    public List<Staff> findStaffUsingFilterWorkHourComparator() throws DaoException {
+
+        List<Staff> staffList = findAllStaff();
+        StaffWorkHourComparator workHourComparator = new StaffWorkHourComparator(SortType.Ascending);
+        Collections.sort( staffList, workHourComparator);
+
+        return staffList;
+    }
+
+    @Override
+    /**Using Comparator - StaffFirstNameComparator*/
+    public List<Staff> findStaffUsingFilterFirstNameComparator() throws DaoException {
+
+        List<Staff> staffList = findAllStaff();
+        StaffCounterComparator firstNameComp = new StaffCounterComparator();
+        Collections.sort( staffList, firstNameComp);
+
+        return staffList;
+    }
+
+    @Override
+    /**Using DB Query - Order By*/
+    public List<Staff> findStaffUsingFilterFirstName() throws DaoException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        List<Staff> staffList = new ArrayList<>();
+
+        try {
+            //Get connection object using the methods in the super class (MySqlDao.java)...
+            connection = this.getConnection();
+
+            String query = "Select * from Bar_Staff ORDER by firstName";
+            ps = connection.prepareStatement(query);
+
+            //Using a PreparedStatement to execute SQL...
+            resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                int staffID = resultSet.getInt("staffID");
+                String staff_position = resultSet.getString("staff_position");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                double ratePerHour = resultSet.getDouble("ratePerHour");
+                int workHours = resultSet.getInt("workHours");
+                String email = resultSet.getString("email");
+                Staff s = new Staff(staffID, staff_position, firstName, lastName, ratePerHour, workHours, email);
+                staffList.add(s);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("findAllStaffFilter() " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findAllStaff() " + e.getMessage());
+            }
+        }
+        return staffList;     // may be empty
+    }
+
 }
