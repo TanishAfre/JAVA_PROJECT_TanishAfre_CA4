@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.example.menus.App.VALID_EMAIL_ADDRESS_REGEX;
 
 public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
 
@@ -67,7 +68,7 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
     }
 
     @Override
-    public Staff findStaffbyID(int id) throws DaoException {
+    public Staff findStaffByID(int id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -75,7 +76,7 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
         try {
             connection = this.getConnection();
 
-            String query = "SELECT * FROM Bar_Staff WHERE staffID = ?";
+            String query = "SELECT * FROM Bar_Staff WHERE staff_id = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
 
@@ -92,7 +93,7 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
 
             }
         } catch (SQLException e) {
-            throw new DaoException("findStaffbyID() " + e.getMessage());
+            throw new DaoException("findStaffByID() " + e.getMessage());
         } finally {
             try {
                 if (resultSet != null) {
@@ -105,7 +106,7 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
                     freeConnection(connection);
                 }
             } catch (SQLException e) {
-                throw new DaoException("findStaffbyID() " + e.getMessage());
+                throw new DaoException("findStaffByID() " + e.getMessage());
             }
         }
         return s;     // reference to User object, or null value
@@ -117,16 +118,16 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
-        int staffID = id;
+        int staff_id = id;
 
         try {
             //Get connection object using the methods in the super class (MySqlDao.java)...
             connection = this.getConnection();
 
-            String query = "DELETE FROM Bar_Staff WHERE staffID = ?;";
+            String query = "DELETE FROM Bar_Staff WHERE staff_id = ?;";
 
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, staffID);
+            preparedStatement.setInt(1, staff_id);
 
             preparedStatement.executeUpdate();
 
@@ -218,14 +219,14 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             //Using a PreparedStatement to execute SQL...
             resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                int staffID = resultSet.getInt("staffID");
+                int staff_id = resultSet.getInt("staff_id");
                 String staff_position = resultSet.getString("staff_position");
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                double ratePerHour = resultSet.getDouble("ratePerHour");
-                int workHours = resultSet.getInt("workHours");
+                String first_name = resultSet.getString("first_name");
+                String last_name = resultSet.getString("last_name");
+                double rate_per_hour = resultSet.getDouble("rate_per_hour");
+                int work_hours = resultSet.getInt("work_hours");
                 String email = resultSet.getString("email");
-                Staff s = new Staff(staffID, staff_position, firstName, lastName, ratePerHour, workHours, email);
+                Staff s = new Staff(staff_id, first_name, last_name, staff_position, rate_per_hour, work_hours, email);
                 staffList.add(s);
             }
         } catch (SQLException e) {
@@ -254,7 +255,7 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
 
         List<Staff> staffList = findAllStaff();
         StaffWorkHourComparator workHourComparator = new StaffWorkHourComparator(SortType.Ascending);
-        Collections.sort( staffList, workHourComparator);
+        Collections.sort( staffList, workHourComparator );
 
         return staffList;
     }
@@ -282,26 +283,26 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             //Get connection object using the methods in the super class (MySqlDao.java)...
             connection = this.getConnection();
 
-            String query = "Select * from Bar_Staff ORDER by firstName";
+            String query = "Select * from Bar_Staff ORDER by first_name";
             ps = connection.prepareStatement(query);
 
             //Using a PreparedStatement to execute SQL...
             resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                int staffID = resultSet.getInt("staffID");
+                int staff_id = resultSet.getInt("staff_id");
                 String staff_position = resultSet.getString("staff_position");
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                double ratePerHour = resultSet.getDouble("ratePerHour");
-                int workHours = resultSet.getInt("workHours");
+                String first_name = resultSet.getString("first_name");
+                String last_name = resultSet.getString("last_name");
+                double rate_per_hour = resultSet.getDouble("rate_per_hour");
+                int work_hours = resultSet.getInt("work_hours");
                 String email = resultSet.getString("email");
-                Staff s = new Staff(staffID, staff_position, firstName, lastName, ratePerHour, workHours, email);
+                Staff s = new Staff(staff_id, staff_position, first_name, last_name, rate_per_hour, work_hours, email);
                 staffList.add(s);
             }
         } catch (SQLException e) {
             throw new DaoException("findAllStaffFilter() " + e.getMessage());
         } finally {
-            try {
+            try{
                 if (resultSet != null) {
                     resultSet.close();
                 }
@@ -334,11 +335,11 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
         return "Error cannot Parse to JSON";
     }
 
-    public String findStaffbyIDJSON(int id){
+    public String findStaffByIDJSON(int id){
         try{
             List<Staff> staffList = findAllStaff();
             String StaffJSON="";
-            Staff sTest= findStaffbyID(id);
+            Staff sTest= findStaffByID(id);
             if(sTest==null){
                 System.out.println("Staff with ID = "+id+" doesn't exist.");
             }
@@ -358,6 +359,50 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             e.printStackTrace();
         }
         return "Error cannot Parse to JSON";
+    }
+
+    public String findStaffbyIDJSONoFormatting(int id){
+        try{
+            List<Staff> staffList = findAllStaff();
+            String StaffJSON="";
+            Staff sTest= findStaffByID(id);
+            if(sTest==null){
+                System.out.println("Staff with ID = "+id+" doesn't exist.");
+            }
+            else{
+                System.out.println("Staff with id "+id+" as a JSON String: ");
+            }
+            Gson gsonParser = new Gson();
+            for(Staff s: staffList){
+                if(s.getStaff_id()==id) {
+                    StaffJSON = gsonParser.toJson(s);
+                }
+            }
+            return StaffJSON;
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+        return "Error cannot Parse to JSON";
+    }
+
+    public String findAllStaffJSONNoFormatting(){
+
+        System.out.println("All Staff as JSON String: ");
+        try {
+            List<Staff> staffList = findAllStaff();
+            Gson gsonParser = new Gson();
+            String StaffJSON = gsonParser.toJson(staffList);
+
+            return StaffJSON;
+
+        }catch ( DaoException e )
+        {
+            e.printStackTrace();
+        }
+        return "Error cannot Parse to JSON";
+
     }
 
 }
