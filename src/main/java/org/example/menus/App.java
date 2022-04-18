@@ -1,32 +1,24 @@
-package org.example;
+package org.example.menus;
 
+import org.example.Counter;
 import org.example.DAO.MySqlStaffDAO;
 import org.example.DAO.StaffDAO_Interface;
 import org.example.DTO.Staff;
 import org.example.Exceptions.DaoException;
+import org.example.SortType;
+import org.example.StaffCounterComparator;
+import org.example.StaffWorkHourComparator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import java.util.*;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
     public static void main(String[] args) {
-        App main = new App();
-        main.start();
-    }
-
-    PriorityQueue<Staff> queue;
-    static ArrayList<Staff> staff_list = new ArrayList<>();
-
-    public void start(){
-
-        this.queue = new PriorityQueue<>();
+        // Initialization of Arraylist
+        ArrayList<Staff> staff_list = new ArrayList<>();
 
 
         staff_list.add(new Staff(1, "Manager", "Tanish", "Afre", 15.50, 75, "ta@gmail.com"));   //1162.5
@@ -40,7 +32,6 @@ public class App
         staff_list.add(new Staff(9, "Floor Staff", "Tom", "Holland", 10.50, 20, "th@gmail.com"));   //230
         staff_list.add(new Staff(10, "Floor Staff", "Stephen", "Strange", 12.00, 25, "ss@gmail.com"));  //300
         staff_list.add(new Staff(11, "Floor Staff", "Seb", "Dovel", 12.00, 30, "sd@gmail.com"));    //360
-
 
         //Main Menu
         final String MENU_ITEMS = "\n*** MAIN MENU ***\n"
@@ -89,7 +80,7 @@ public class App
                     case TWO_FIELD_COMPARISON:
                         PriorityQueueTwoFieldComparisonDemo(staff_list);
                     case Staff_Collections:
-                        DBCollection();
+                        DBCollection(staff_list);
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
@@ -103,8 +94,8 @@ public class App
             }
         } while (option != EXIT);
         System.out.println("\nExiting Main Menu, Thank you!.");
-
     }
+
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -161,6 +152,7 @@ public class App
         Map<Staff, Counter> stationMap = new TreeMap<>(new StaffCounterComparator());
 
         // filling values in treeMap as per work hours just to avoid tedious hard coding
+        // if the user has less than
 
         for (Staff s : staffArrayList) {
             if (s.getWork_hours() == 15) {
@@ -208,7 +200,7 @@ public class App
         System.out.println(s.toString() + "  -  Pay per week: €" + (s.getRate_per_hour() * s.getWork_hours()));
 
         // add one top-priority element
-        queue.add(staff_list.get(0));
+        queue.add(new Staff(1, "Manager", "Tanish", "Afre", 15.50, 75, "ta@gmail.com"));
 
         // remove and display all elements in priority order
         System.out.println("\nRemove and display all elements");
@@ -233,7 +225,7 @@ public class App
 // menu 2
 //________________________________________________________________________________________________________________________
 
-    public static void DBCollection(){
+    public static void DBCollection(ArrayList<Staff> staffArrayList){
 
         StaffDAO_Interface IStaffDao = new MySqlStaffDAO(); //Staff DAO Interface
 
@@ -255,7 +247,7 @@ public class App
         final int insertStaff =4;
         final int findAllUsingFilter = 5;
         final int findAllStaffJSON = 6;
-        final int findStaffbyIDJSON = 7;
+        final int findStaffByIDJSON = 7;
         final int EXIT = 8;
 
 
@@ -291,7 +283,7 @@ public class App
                         System.out.println("JSON All Staff option chosen");
                         findAllStaffJSON(IStaffDao);
                         break;
-                    case findStaffbyIDJSON:
+                    case findStaffByIDJSON:
                         System.out.println("JSON Staff by ID option chosen");
                         findStaffbyIDJSON(IStaffDao);
                         break;
@@ -338,11 +330,8 @@ public class App
 
             try {
                 System.out.println("Enter Staff ID");
-
                 int id = sc.nextInt();
-
-
-                Staff s = IStaffDao.findStaffbyID(id);
+                Staff s = IStaffDao.findStaffByID(id);
 
                 if (s != null) // null returned if userid and password not valid
                     System.out.println("Staff found: ID=" + s.getStaff_id() + " " + s.getFirst_name() + " " + s.getLast_name() + "\tEmail=" + s.getEmail() + "\tPosition=" + s.getStaff_position() + "\tWorkHours=" + s.getWork_hours() + "\tRatePerHour=" + s.getRate_per_hour());
@@ -372,7 +361,7 @@ public class App
                 int id = sc.nextInt();
 
 
-                Staff s = IStaffDao.findStaffbyID(id);
+                Staff s = IStaffDao.findStaffByID(id);
 
                 if(s!=null){
                     IStaffDao.deleteById(id);
@@ -405,7 +394,7 @@ public class App
 
                 System.out.println("Enter Staff ID");
                 int id = sc.nextInt();
-                Staff s = IStaffDao.findStaffbyID(id);
+                Staff s = IStaffDao.findStaffByID(id);
                 if(s==null) {
                     System.out.println("\nCall addStaff()\n");
                     try {
@@ -421,6 +410,7 @@ public class App
                         int work_hours = sc.nextInt();
                         System.out.println("Enter Staff Email");
                         String email = sc.next();
+
                         /*regex*/
                         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
                         if(matcher.matches()){
@@ -436,7 +426,7 @@ public class App
                     }
                 }
                 else{
-                    System.out.println("Duplicate ID - Insert Failed!");
+                    System.out.println("Duplicate ID Found - Insert Failed!");
                 }
 
             }
