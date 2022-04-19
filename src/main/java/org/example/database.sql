@@ -1,11 +1,13 @@
 DROP TABLE IF EXISTS Bar_Staff;
 
-CREATE TABLE Bar_Staff(staffID int NOT NULL AUTO_INCREMENT,
-                       first_name VARCHAR(30),
-                       last_Name VARCHAR(30),
-                       ratePerHour double,
-                       work_hours int,
-                       email VARCHAR(70));
+CREATE TABLE `ca_bar`.`Bar_Staff` ( `staff_id` INT NOT NULL ,
+                                    `staff_position` VARCHAR(50) NOT NULL ,
+                                    `first_name` CHAR(50) NOT NULL ,
+                                    `last_name` CHAR(50) NOT NULL ,
+                                    `rate_per_hour` DOUBLE NOT NULL ,
+                                    `work_hours` INT NOT NULL ,
+                                    `email` VARCHAR(50) NOT NULL,
+                                     PRIMARY KEY (`staff_id`(3))) ENGINE = InnoDB;
 
 
 INSERT INTO Bar_Staff VALUES (1, "Manager", "Tanish", "Afre", 15.50, 75, "ta@gmail.com");
