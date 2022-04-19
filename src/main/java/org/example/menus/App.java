@@ -548,7 +548,7 @@ public class App
             try {
                 System.out.println("Enter Staff ID");
                 int json_id = kb.nextInt();
-                System.out.println(IStaffDao.findStaffbyIDJSON(json_id));
+                System.out.println(IStaffDao.findStaffByIDJSON(json_id));
 
             }catch (InputMismatchException | NumberFormatException e) {
                 System.out.print("Invalid option - please enter number in range");
