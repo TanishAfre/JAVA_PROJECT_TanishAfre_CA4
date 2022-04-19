@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.example.menus.App.VALID_EMAIL_ADDRESS_REGEX;
@@ -403,6 +404,51 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
         }
         return "Error cannot Parse to JSON";
 
+    }
+
+    public String summaryDataJSON(){
+        String JSONRes="";
+        HashMap<String,Double> res = new HashMap<>();
+        try {
+            //average salary
+            List<Staff> staffList = findAllStaff();
+            double total =0;
+            double count =0;
+            double avg = 0;
+            for(Staff s: staffList){
+                total += s.getRate_per_hour()*s.getWork_hours();
+                count++;
+            }
+            avg = total/count;
+            res.put("AVERAGE SALARY of Staff",avg);
+
+
+            //standard deviation
+            double sub=0;
+            double standardDeviation =0;
+            double subTotal=0;
+            double subCount=0;
+            for(Staff s:staffList){
+                sub = Math.abs(((s.getRate_per_hour()*s.getWork_hours())-avg)*((s.getRate_per_hour()*s.getWork_hours())-avg));
+                subTotal+=sub;
+                subCount++;
+            }
+            standardDeviation = Math.sqrt(subTotal/subCount);
+            res.put("STANDARD DEVIATION of Salaries",standardDeviation);
+
+            //total salary earned by each Staff
+            for(Staff s:staffList){
+                res.put("total Salary of "+s.getFirst_name()+" "+s.getLast_name(),s.getWork_hours()*s.getRate_per_hour());
+            }
+
+            Gson gsonParser = new GsonBuilder().setPrettyPrinting().create();
+            JSONRes = gsonParser.toJson(res);
+
+        }catch ( DaoException e )
+        {
+            e.printStackTrace();
+        }
+        return JSONRes;
     }
 
 }
