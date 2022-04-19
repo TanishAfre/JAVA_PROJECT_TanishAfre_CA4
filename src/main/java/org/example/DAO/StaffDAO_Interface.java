@@ -25,4 +25,6 @@ public interface StaffDAO_Interface
 
     public String findAllStaffJSON() throws DaoException;
     public String findStaffByIDJSON(int id) throws DaoException;
+
+    public String findAllStaffJSONNoFormatting() throws DaoException;
 }
