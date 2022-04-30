@@ -42,7 +42,7 @@ public class Server {
         } catch (IOException e) {
             System.out.println("Server: IOException: " + e);
         }
-        System.out.println("Server: Server exiting, Goodbye!");
+        System.out.println("Server: Server exiting!");
     }
 
     public class ClientHandler implements Runnable   // each ClientHandler communicates with one Client
@@ -86,7 +86,6 @@ public class Server {
                             String[] tokens = message.split(" ");
                             int id = Integer.parseInt(tokens[1]);
                             try {
-
                                 IStaffDao.findStaffbyIDJSONoFormatting(id);
                                 socketWriter.println(IStaffDao.findStaffbyIDJSONoFormatting(id));
                             } catch (DaoException e) {
@@ -112,7 +111,7 @@ public class Server {
                                 int work_hours = Integer.parseInt(tokens[6]);
                                 double rate_per_hour = Double.parseDouble(tokens[7]);
                                 if (IStaffDao.findStaffByID(id) == null) {
-                                    IStaffDao.addStaff(new Staff(id, staff_position,first_name, last_name, rate_per_hour, work_hours, email));
+                                    IStaffDao.addStaff(new Staff(id,first_name, last_name, staff_position, rate_per_hour, work_hours, email));
                                     socketWriter.println("Staff Added Successfully");
                                 } else {
                                     socketWriter.println("Duplicate ID " + id + " cannot add");

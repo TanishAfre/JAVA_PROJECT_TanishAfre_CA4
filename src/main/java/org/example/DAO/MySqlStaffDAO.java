@@ -45,7 +45,7 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
                 double rate_per_hour = resultSet.getDouble("rate_per_hour");
                 int work_hours = resultSet.getInt("work_hours");
                 String email = resultSet.getString("email");
-                Staff s = new Staff(staff_id, first_name, last_name, staff_position, rate_per_hour, work_hours, email);
+                Staff s = new Staff(staff_id, staff_position, first_name, last_name,  rate_per_hour, work_hours, email);
                 staffList.add(s);
             }
         } catch (SQLException e) {
@@ -159,8 +159,10 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         int STAFF_ID = staff.getStaff_id();
+        String STAFF_POSITION = staff.getStaff_position();
         String FIRST_NAME = staff.getFirst_name();
         String LAST_NAME = staff.getLast_name();
+       //  String position
         double RATE_PER_HOUR  = staff.getRate_per_hour();
         int WORK_HOURS  = staff.getWork_hours();
         String EMAIL = staff.getEmail();
@@ -170,15 +172,16 @@ public class MySqlStaffDAO extends MySqlDAO implements StaffDAO_Interface {
             connection = this.getConnection();
 
             String query = "INSERT INTO Bar_Staff\n" +
-                    "VALUES (?,?, ?, ?, ?,?);";
+                    "VALUES ( ?, ?, ?, ?, ?, ?,?);";
 
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, STAFF_ID);
-            preparedStatement.setString(2, FIRST_NAME);
-            preparedStatement.setString(3, LAST_NAME);
-            preparedStatement.setDouble(4, RATE_PER_HOUR);
-            preparedStatement.setInt(5, WORK_HOURS);
-            preparedStatement.setString(6, EMAIL);
+            preparedStatement.setString(2, STAFF_POSITION);
+            preparedStatement.setString(3, FIRST_NAME);
+            preparedStatement.setString(4, LAST_NAME);
+            preparedStatement.setDouble(5, RATE_PER_HOUR);
+            preparedStatement.setInt(6, WORK_HOURS);
+            preparedStatement.setString(7, EMAIL);
 
             preparedStatement.executeUpdate();
 

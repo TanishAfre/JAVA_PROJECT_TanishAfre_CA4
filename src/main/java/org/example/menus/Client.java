@@ -53,8 +53,11 @@ public class Client
                             System.out.println(s);
 
                     } else if (command.startsWith("DisplayById")) {
+                        //System.out.println("we are in");
                         Gson gsonParser = new Gson();
+
                         String input = socketReader.nextLine();
+
                         try {
                             Staff outputClass = gsonParser.fromJson(input, Staff.class);
                             String output = outputClass.toString();
