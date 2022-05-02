@@ -76,24 +76,12 @@ public class Client
                         String input = socketReader.nextLine();
                         System.out.println("Client message: Response from server: " + input);
                         break;
-                    } else if (command.startsWith("Summary")) {
-                        String input = socketReader.nextLine();
-                        ObjectMapper mapper = new ObjectMapper();
-                        HashMap<String, Double> map = mapper.readValue(input, HashMap.class);
-                        System.out.println("Client message: Response from server -> Summary Data : ");
-                        String key;
-                        Double value;
-                        for (Map.Entry<String, Double> entry : map.entrySet()) {
-                            key = entry.getKey();
-                            value = entry.getValue();
-                            System.out.printf("%10s: %2.3f\n", key, value);
-                        }
                     } else {
                         String input = socketReader.nextLine();
                         System.out.println("Client message: Response from server: \"" + input + "\"");
                     }
 
-                    System.out.println("\nPlease enter a command:  \n \"DisplayById\"- to get staff by Id \n \"DisplayAll\"- to get all staff \n \"AddStaff\"- to add staff \n \"DeleteStaffById\"- to delete staff by Id\n \"Summary\"- to view Total salary for each staff, Average and Standard Deviation for staff salary\n \"Quit\"- to quit application\n>");
+                    System.out.println("\nPlease enter a command:  \n \"DisplayById\"- to get staff by Id \n \"DisplayAll\"- to get all staff \n \"AddStaff\"- to add staff \n \"DeleteStaffById\"- to delete staff by Id\n \"Quit\"- to quit application\n>");
                     command = in.nextLine();
                     socketWriter.println(command); //println very important - otherwise takes in all characters before \n
 

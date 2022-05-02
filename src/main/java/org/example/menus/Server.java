@@ -123,13 +123,6 @@ public class Server {
                         } else if (message.startsWith("Quit")) {
                             socketWriter.println("Exiting Application");
                             break;
-                        } else if (message.startsWith("Summary")) {
-                            try {
-                                IStaffDao.summaryDataJSON();
-                                socketWriter.println(IStaffDao.summaryDataJSON());
-                            } catch (DaoException e) {
-                                e.printStackTrace();
-                            }
                         } else if (message.startsWith("DeleteStaffById")) {
 
 
