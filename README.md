@@ -25,3 +25,13 @@ This project was a part of my second-year project. In this project I have used c
 10. Implement a client-side menu item that will allow the user to input data for an entity, serialize the data into JSON formatted request and send the JSON request to the server. The server will add the entity to the database using a relevant DAO, and will send a response to the client. The response will return the Entity object data incorporating the newly allocated ID (if the ID was auto generated). The client will display the newly added entity, along with its auto generated ID. If the insert fails, an appropriate error should be displayed.
 11. In a manner similar to above, provide a menu item that will delete an entity by ID, send a command to the server to undertake the delete, and display an appropriate message on the client.
 12. Detail all of the messages that pass between the client and server to implement all of the features of this CA. Draw this out in a diagram showing all of the data that is passed in each direction in the appropriate format.
+
+
+## Main Menu
+![index](https://github.com/TanishAfre/JAVA_PROJECT_TanishAfre_CA4/blob/master/src/main/java/org/example/images/menu.png?raw=true)
+## Database Menu
+![index](https://github.com/TanishAfre/JAVA_PROJECT_TanishAfre_CA4/blob/master/src/main/java/org/example/images/DBMenu.png?raw=true)
+## Client
+![index](https://github.com/TanishAfre/JAVA_PROJECT_TanishAfre_CA4/blob/master/src/main/java/org/example/images/cliemt.png?raw=true)
+## Server
+![index](https://github.com/TanishAfre/JAVA_PROJECT_TanishAfre_CA4/blob/master/src/main/java/org/example/images/server.png?raw=true)
